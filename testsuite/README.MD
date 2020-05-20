@@ -50,7 +50,7 @@ To run the testsuite with failing tests included for testing purposes:
 > mvn clean verify -Dserver.home=PATH_TO_WIDLFLY_HOME -Denable.expected.failing -fn
 
 ### Single test
-> mvn surefire:test@default-test -Dserver.home=PATH_TO_WIDLFLY_HOME -Dtest=NAME_OF_THE_TEST_CLASS -fn
+> mvn clean verify -Dserver.home=PATH_TO_WIDLFLY_HOME -Dtest=NAME_OF_THE_TEST_CLASS -fn
 
 ### Speciality single test JsonBindingTest and JsonBindingAnnotationsJacksonTest
 To run test JsonBindingTest requires the use of a speciality surefire syntax.
@@ -59,7 +59,7 @@ To run test JsonBindingTest requires the use of a speciality surefire syntax.
 "@jsonb-test" is the id of a surefile execution definition in the pom file.
 
 Test JsonBindingAnnotationsJacksonTest is run with command
-> mvn surefire:test@default-test   -Dserver.home=PATH_TO_WIDLFLY_HOME -Dtest=JsonBindingAnnotationsJacksonTest -fn
+> mvn clean verify -Dserver.home=PATH_TO_WIDLFLY_HOME -Dtest=JsonBindingAnnotationsJacksonTest -fn
 
 ### Custom resteasy version
 Resteasy version for unit-tests and for client side of integration tests can be specified with ``-Dversion.resteasy.testsuite=RESTEASY_VERSION``

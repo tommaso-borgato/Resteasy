@@ -23,6 +23,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Fails because of JBEAP-19186
+ */
 @RunWith(Arquillian.class)
 @RunAsClient
 public class PatchErrorHandlingTest {

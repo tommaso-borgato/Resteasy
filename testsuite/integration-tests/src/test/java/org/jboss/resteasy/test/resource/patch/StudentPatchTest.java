@@ -24,6 +24,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Fails because of JBEAP-19186
+ */
 @RunWith(Arquillian.class)
 @RunAsClient
 public class StudentPatchTest {
