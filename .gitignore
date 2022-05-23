@@ -44,3 +44,4 @@ myDB.script
 myDB.properties
 
 .DS_Store
+testsuite/run-test.sh
