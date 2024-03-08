@@ -15,6 +15,7 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
+import org.jboss.resteasy.category.NotForBootableJar;
 import org.jboss.resteasy.test.interceptor.resource.AddDynamicFeature;
 import org.jboss.resteasy.test.interceptor.resource.AddDynamicFeature.DoNothingMethodScopedRequestFilter;
 import org.jboss.resteasy.test.interceptor.resource.AddFeature;
@@ -30,6 +31,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 
 /**
@@ -72,6 +74,7 @@ public class DynamicFeatureTest {
      *                - dynamic features for filters and interceptors are resolved once for each resource method
      * @tpSince RESTEasy 3.8.0
      */
+    @Category(NotForBootableJar.class)
     @Test
     @InSequence(1)
     public void testDynamicFeatureProcessing() {
