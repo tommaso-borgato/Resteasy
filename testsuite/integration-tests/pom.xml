@@ -757,7 +757,7 @@
                         <id>prepare-tracing-configuration</id>
                         <phase>process-test-classes</phase>
                         <configuration>
-                            <target>
+                            <target unless="ts.bootable">
                                 <!-- Prepare configuration with more verbose logging for tracing tests -->
                                 <copy file="${container.base.dir.manual.tracing}/configuration/standalone.xml"
                                       tofile="${container.base.dir.manual.tracing}/configuration/standalone-tracing.xml"/>
