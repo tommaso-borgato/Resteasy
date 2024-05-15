@@ -242,6 +242,35 @@
             </properties>
         </profile>
         <profile>
+            <id>bootablejar.profile.channel</id>
+            <activation>
+                <property>
+                    <name>ts.bootable.channel</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.wildfly.plugins</groupId>
+                            <artifactId>wildfly-jar-maven-plugin</artifactId>
+                            <configuration>
+                                <channels>
+                                    <channel>
+                                        <manifest>
+                                            <groupId>${channel-manifest.groupId}</groupId>
+                                            <artifactId>${channel-manifest.artifactId}</artifactId>
+                                            <version>${channel-manifest.version}</version>
+                                        </manifest>
+                                    </channel>
+                                </channels>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+        <profile>
             <id>bootablejar.profile</id>
             <activation>
                 <property>
@@ -299,7 +328,7 @@
                                         <layer>microprofile-config</layer>
                                         <layer>datasources</layer>
                                         <layer>h2-default-datasource</layer>
-                                        <layer>undertow-legacy-https</layer>
+                                        <layer>undertow-https</layer>
                                         <layer>ejb</layer>
                                     </layers>
                                 </configuration>
@@ -330,6 +359,7 @@
                                 <container.qualifier.managed.encoding>${container.qualifier.managed.encoding}</container.qualifier.managed.encoding>
                                 <container.offset.managed.encoding>${container.offset.managed.encoding}</container.offset.managed.encoding>
                                 <container.management.port.managed.encoding>${container.management.port.managed.encoding}</container.management.port.managed.encoding>
+                                <resteasy.microprofile.sseclient.buffersize>5</resteasy.microprofile.sseclient.buffersize>
                             </systemPropertyVariables>
                         </configuration>
                         <executions>
