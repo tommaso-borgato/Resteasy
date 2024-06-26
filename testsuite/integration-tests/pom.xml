@@ -25,11 +25,6 @@
         <module.jar.path>${jboss.home}${file.separator}modules${file.separator}system${file.separator}layers${file.separator}base</module.jar.path>
 
         <version.org.jboss.shrinkwrap.resolver>3.3.0</version.org.jboss.shrinkwrap.resolver>
-
-        <!-- Channel Manifest for Bootable Jar -->
-        <channel-manifest.groupId>org.jboss.eap.channels</channel-manifest.groupId>
-        <channel-manifest.artifactId>eap-8.0-plus-eap-xp-5.0</channel-manifest.artifactId>
-        <channel-manifest.version>1.0.1.GA-redhat-20240229</channel-manifest.version>
     </properties>
 
     <artifactId>resteasy-integration-tests</artifactId>
@@ -41,79 +36,79 @@
         Descr: Download WildFly
         -->
         <profile>
-          <id>download</id>
-          <activation>
-            <property>
-              <name>!server.home</name>
-            </property>
-          </activation>
-          <properties>
-              <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
-          </properties>
-          <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>server-provisioning</id>
-                            <phase>generate-test-resources</phase>
-                            <goals>
-                                <goal>provision</goal>
-                            </goals>
-                            <configuration>
-                                <feature-packs>
-                                    <feature-pack>
-                                        <groupId>${server.test.feature.pack.groupId}</groupId>
-                                        <artifactId>${server.test.feature.pack.artifactId}</artifactId>
-                                        <version>${server.version}</version>
-                                        <inherit-configs>false</inherit-configs>
-                                        <included-configs>
-                                            <config>
-                                                <model>standalone</model>
-                                                <name>standalone-full.xml</name>
-                                            </config>
-                                            <config>
-                                                <model>standalone</model>
-                                                <name>standalone.xml</name>
-                                            </config>
-                                        </included-configs>
-                                        <excluded-packages>
-                                            <name>docs.schema</name>
-                                            <name>appclient</name>
-                                            <name>domain</name>
-                                        </excluded-packages>
-                                    </feature-pack>
-                                </feature-packs>
-                                <channels>
-                                    <!-- If the server.version is blank the newest version of WildFly will be used. Otherwise, be
-                                         explicit.
-                                     -->
-                                    <channel>
-                                        <manifest>
-                                            <groupId>${wildfly.channel.manifest.groupId}</groupId>
-                                            <artifactId>${wildfly.channel.manifest.artifactId}</artifactId>
+            <id>download</id>
+            <activation>
+                <property>
+                    <name>!server.home</name>
+                </property>
+            </activation>
+            <properties>
+                <jboss.home>${project.build.directory}${file.separator}wildfly</jboss.home>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>server-provisioning</id>
+                                <phase>generate-test-resources</phase>
+                                <goals>
+                                    <goal>provision</goal>
+                                </goals>
+                                <configuration>
+                                    <feature-packs>
+                                        <feature-pack>
+                                            <groupId>${server.test.feature.pack.groupId}</groupId>
+                                            <artifactId>${server.test.feature.pack.artifactId}</artifactId>
                                             <version>${server.version}</version>
-                                        </manifest>
-                                    </channel>
-                                    <channel>
-                                        <manifest>
-                                            <groupId>${resteasy.channel.manifest.groupId}</groupId>
-                                            <artifactId>${resteasy.channel.manifest.artifactId}</artifactId>
-                                            <version>${resteasy.channel.manifest.version}</version>
-                                        </manifest>
-                                    </channel>
-                                </channels>
-                                <galleon-options>
-                                    <jboss-maven-dist/>
-                                </galleon-options>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-          </build>
+                                            <inherit-configs>false</inherit-configs>
+                                            <included-configs>
+                                                <config>
+                                                    <model>standalone</model>
+                                                    <name>standalone-full.xml</name>
+                                                </config>
+                                                <config>
+                                                    <model>standalone</model>
+                                                    <name>standalone.xml</name>
+                                                </config>
+                                            </included-configs>
+                                            <excluded-packages>
+                                                <name>docs.schema</name>
+                                                <name>appclient</name>
+                                                <name>domain</name>
+                                            </excluded-packages>
+                                        </feature-pack>
+                                    </feature-packs>
+                                    <channels>
+                                        <!-- If the server.version is blank the newest version of WildFly will be used. Otherwise, be
+                                             explicit.
+                                         -->
+                                        <channel>
+                                            <manifest>
+                                                <groupId>${wildfly.channel.manifest.groupId}</groupId>
+                                                <artifactId>${wildfly.channel.manifest.artifactId}</artifactId>
+                                                <version>${server.version}</version>
+                                            </manifest>
+                                        </channel>
+                                        <channel>
+                                            <manifest>
+                                                <groupId>${resteasy.channel.manifest.groupId}</groupId>
+                                                <artifactId>${resteasy.channel.manifest.artifactId}</artifactId>
+                                                <version>${resteasy.channel.manifest.version}</version>
+                                            </manifest>
+                                        </channel>
+                                    </channels>
+                                    <galleon-options>
+                                        <jboss-maven-dist/>
+                                    </galleon-options>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>provision-without-resteasy</id>
@@ -184,12 +179,34 @@
             </build>
         </profile>
         <profile>
+            <id>default</id>
+            <activation>
+                <property>
+                    <name>!ts.bootable</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>bootablejar.profile</id>
             <activation>
                 <property>
                     <name>ts.bootable</name>
                 </property>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-bootable</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <!-- Disable the standard copy-based provisioning -->
@@ -227,8 +244,8 @@
                                     </plugin-options>
                                     <feature-packs>
                                         <feature-pack>
-                                            <groupId>${testsuite.wildfly.galleon.pack.group.id}</groupId>
-                                            <artifactId>wildfly-galleon-pack</artifactId>
+                                            <groupId>${server.test.feature.pack.groupId}</groupId>
+                                            <artifactId>${server.test.feature.pack.artifactId}</artifactId>
                                             <version>${server.version}</version>
                                             <!-- Required for rxjava -->
                                             <includedPackages>
@@ -238,7 +255,6 @@
                                     </feature-packs>
                                     <layers>
                                         <layer>jaxrs-server</layer>
-                                        <layer>microprofile-config</layer>
                                         <layer>datasources</layer>
                                         <layer>h2-default-datasource</layer>
                                         <layer>undertow-https</layer>
@@ -247,9 +263,9 @@
                                     <channels>
                                         <channel>
                                             <manifest>
-                                                <groupId>${channel-manifest.groupId}</groupId>
-                                                <artifactId>${channel-manifest.artifactId}</artifactId>
-                                                <version>${channel-manifest.version}</version>
+                                                <groupId>${wildfly.channel.manifest.groupId}</groupId>
+                                                <artifactId>${wildfly.channel.manifest.artifactId}</artifactId>
+                                                <version>${wildfly.channel.manifest.version}</version>
                                             </manifest>
                                         </channel>
                                     </channels>
@@ -561,7 +577,7 @@
             <artifactId>resteasy-netty4</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-wadl-undertow-connector</artifactId>
@@ -692,11 +708,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.arquillian</groupId>
-            <artifactId>wildfly-arquillian-container-managed</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.arquillian</groupId>
             <artifactId>wildfly-arquillian-junit-api</artifactId>
             <scope>test</scope>
         </dependency>
@@ -714,12 +725,14 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>arquillian.xml</include>
+                    <include>arquillian-bootable.xml</include>
                 </includes>
             </testResource>
             <testResource>
                 <directory>src/test/resources</directory>
                 <excludes>
                     <exclude>arquillian.xml</exclude>
+                    <exclude>arquillian-bootable.xml</exclude>
                 </excludes>
             </testResource>
         </testResources>
@@ -801,51 +814,51 @@
                         <module.jar.path>${module.jar.path}</module.jar.path>
                     </systemPropertyVariables>
                 </configuration>
-                    <executions>
+                <executions>
 
-                        <!-- Re-evaluate https://issues.jboss.org/browse/RESTEASY-1884 in case we find ourselves
-                             in need of adding additional execution. -->
+                    <!-- Re-evaluate https://issues.jboss.org/browse/RESTEASY-1884 in case we find ourselves
+                         in need of adding additional execution. -->
 
-                        <!-- default test execution -->
-                        <execution>
-                            <id>default-test</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <excludes>
-                                    <!-- Tests requires excluding JsonBindingProvider-->
-                                    <exclude>**/JaxbXmlRootElementProviderTest.java</exclude>
-                                    <exclude>**/JsonBindingAnnotationsJacksonTest.java</exclude>
-                                    <exclude>**/SseJsonEventTest</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
+                    <!-- default test execution -->
+                    <execution>
+                        <id>default-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <!-- Tests requires excluding JsonBindingProvider-->
+                                <exclude>**/JaxbXmlRootElementProviderTest.java</exclude>
+                                <exclude>**/JsonBindingAnnotationsJacksonTest.java</exclude>
+                                <exclude>**/SseJsonEventTest</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
 
 
-                        <!-- execution with excluded JSON-B -->
-                        <execution>
-                            <id>disable-jsonb-client</id>
-                            <phase>test</phase>
-                            <goals>
-                                <goal>test</goal>
-                            </goals>
-                            <configuration>
-                                <includes>
-                                    <include>**/JaxbXmlRootElementProviderTest.java</include>
-                                    <include>**/JsonBindingAnnotationsJacksonTest.java</include>
-                                    <include>**/SseJsonEventTest.java</include>
-                                    <include>**/ValidationJaxbTest.java</include>
-                                </includes>
-                                <classpathDependencyExcludes>
-                                    <classpathDependencyExclude>org.jboss.resteasy:resteasy-json-binding-provider</classpathDependencyExclude>
-                                </classpathDependencyExcludes>
+                    <!-- execution with excluded JSON-B -->
+                    <execution>
+                        <id>disable-jsonb-client</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/JaxbXmlRootElementProviderTest.java</include>
+                                <include>**/JsonBindingAnnotationsJacksonTest.java</include>
+                                <include>**/SseJsonEventTest.java</include>
+                                <include>**/ValidationJaxbTest.java</include>
+                            </includes>
+                            <classpathDependencyExcludes>
+                                <classpathDependencyExclude>org.jboss.resteasy:resteasy-json-binding-provider</classpathDependencyExclude>
+                            </classpathDependencyExcludes>
 
-                            </configuration>
-                        </execution>
+                        </configuration>
+                    </execution>
 
-                    </executions>
+                </executions>
             </plugin>
 
             <!-- generate archive needed by project resteasy-quarkus-testsuite -->
