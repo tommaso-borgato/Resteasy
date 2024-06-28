@@ -28,6 +28,15 @@
 
         <!-- Test dependency versions -->
         <version.org.wildfly.cloud-tests>1.0.0.Alpha2</version.org.wildfly.cloud-tests>
+
+        <!-- Provisioning properties -->
+        <server.version/>
+        <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
+        <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
+
+        <wildfly.channel.manifest.groupId>org.wildfly.channels</wildfly.channel.manifest.groupId>
+        <wildfly.channel.manifest.artifactId>wildfly-ee</wildfly.channel.manifest.artifactId>
+        <wildfly.channel.manifest.version>${server.version}</wildfly.channel.manifest.version>
     </properties>
 
     <dependencyManagement>
@@ -488,7 +497,6 @@
             </activation>
             <properties>
                 <additional.surefire.excluded.bootable.tests>,org.jboss.resteasy.category.NotForBootableJar</additional.surefire.excluded.bootable.tests>
-                <testsuite.wildfly.galleon.pack.group.id>org.wildfly</testsuite.wildfly.galleon.pack.group.id>
             </properties>
             <modules>
                 <module>arquillian-utils</module>

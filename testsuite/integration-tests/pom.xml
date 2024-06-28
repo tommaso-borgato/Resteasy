@@ -56,11 +56,6 @@
         <server.test.feature.pack.groupId>org.wildfly</server.test.feature.pack.groupId>
         <server.test.feature.pack.artifactId>wildfly-ee-galleon-pack</server.test.feature.pack.artifactId>
         <server.test.feature.pack.version>${version.org.wildfly}</server.test.feature.pack.version>
-
-        <!-- Channel Manifest for Bootable Jar -->
-        <channel-manifest.groupId>org.jboss.eap.channels</channel-manifest.groupId>
-        <channel-manifest.artifactId>eap-8.0-plus-eap-xp-5.0</channel-manifest.artifactId>
-        <channel-manifest.version>1.0.1.GA-redhat-20240414</channel-manifest.version>
     </properties>
 
     <artifactId>resteasy-integration-tests</artifactId>
@@ -247,35 +242,6 @@
             </properties>
         </profile>
         <profile>
-            <id>bootablejar.profile.channel</id>
-            <activation>
-                <property>
-                    <name>ts.bootable.channel</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.wildfly.plugins</groupId>
-                            <artifactId>wildfly-jar-maven-plugin</artifactId>
-                            <configuration>
-                                <channels>
-                                    <channel>
-                                        <manifest>
-                                            <groupId>${channel-manifest.groupId}</groupId>
-                                            <artifactId>${channel-manifest.artifactId}</artifactId>
-                                            <version>${channel-manifest.version}</version>
-                                        </manifest>
-                                    </channel>
-                                </channels>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-        <profile>
             <id>bootablejar.profile</id>
             <activation>
                 <property>
@@ -298,6 +264,14 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- Do not provision WildFly for bootable JAR tests -->
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-jar-maven-plugin</artifactId>
@@ -319,8 +293,8 @@
                                     </plugin-options>
                                     <feature-packs>
                                         <feature-pack>
-                                            <groupId>${testsuite.wildfly.galleon.pack.group.id}</groupId>
-                                            <artifactId>wildfly-galleon-pack</artifactId>
+                                            <groupId>${server.test.feature.pack.groupId}</groupId>
+                                            <artifactId>${server.test.feature.pack.artifactId}</artifactId>
                                             <version>${server.version}</version>
                                             <!-- Required for rxjava -->
                                             <includedPackages>
@@ -330,12 +304,20 @@
                                     </feature-packs>
                                     <layers>
                                         <layer>jaxrs-server</layer>
-                                        <layer>microprofile-config</layer>
                                         <layer>datasources</layer>
                                         <layer>h2-default-datasource</layer>
                                         <layer>undertow-https</layer>
                                         <layer>ejb</layer>
                                     </layers>
+                                    <channels>
+                                        <channel>
+                                            <manifest>
+                                                <groupId>${wildfly.channel.manifest.groupId}</groupId>
+                                                <artifactId>${wildfly.channel.manifest.artifactId}</artifactId>
+                                                <version>${wildfly.channel.manifest.version}</version>
+                                            </manifest>
+                                        </channel>
+                                    </channels>
                                 </configuration>
                             </execution>
                         </executions>
@@ -356,8 +338,6 @@
                                 <node>127.0.0.1</node>
                                 <project.version>${project.version}</project.version>
                                 <version.resteasy.testsuite>${version.resteasy.testsuite}</version.resteasy.testsuite>
-                                <security.provider>${security.provider}</security.provider>
-                                <modular.jdk.args>${modular.jdk.args}</modular.jdk.args>
                                 <container.base.dir.managed>${container.base.dir.managed}</container.base.dir.managed>
                                 <container.offset.managed>0</container.offset.managed>
                                 <container.qualifier.managed>${container.qualifier.managed}</container.qualifier.managed>
@@ -366,6 +346,7 @@
                                 <container.management.port.managed.encoding>${container.management.port.managed.encoding}</container.management.port.managed.encoding>
                                 <resteasy.microprofile.sseclient.buffersize>5</resteasy.microprofile.sseclient.buffersize>
                             </systemPropertyVariables>
+                            <excludedGroups>org.jboss.resteasy.category.ExpectedFailing${additional.surefire.excluded.groups}${additional.surefire.exclude.tracing.tests}${additional.surefire.excluded.bootable.tests}</excludedGroups>
                         </configuration>
                         <executions>
                             <execution>
@@ -681,12 +662,14 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>arquillian.xml</include>
+                    <include>arquillian-bootable.xml</include>
                 </includes>
             </testResource>
             <testResource>
                 <directory>src/test/resources</directory>
                 <excludes>
                     <exclude>arquillian.xml</exclude>
+                    <exclude>arquillian-bootable.xml</exclude>
                 </excludes>
             </testResource>
         </testResources>
