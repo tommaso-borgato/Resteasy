@@ -251,11 +251,14 @@ public class MavenUtil {
     }
 
     private static String determineLocalMavenRepositoryHack() {
+        logger.info("[1] mavenRepository: " + mavenRepository);
         if (mavenRepository == null) {
             String classPath = System.getProperty("java.class.path");
+            logger.info("[2] mavenRepository: classPath: " + classPath);
             int end = classPath.indexOf(AETHER_API_NAME) + 1;
             int start = classPath.lastIndexOf(File.pathSeparatorChar, end) + 1;
             String localRepositoryRoot = classPath.substring(start, end);
+            logger.info("[3] mavenRepository: " + localRepositoryRoot);
             mavenRepository = localRepositoryRoot;
         }
         return mavenRepository;
