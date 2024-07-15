@@ -482,7 +482,7 @@ public class TestUtil {
         try {
             mavenGav = mavenUtil.createMavenGavFile(dependency);
         } catch (Exception e) {
-            throw new RuntimeException("Unable to get artifacts from maven via Aether library", e);
+            throw new RuntimeException("Unable to get artifacts from maven via Aether library: " + dependency, e);
         }
 
         return mavenGav;
