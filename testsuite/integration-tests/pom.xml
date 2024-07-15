@@ -248,9 +248,9 @@
                                             <artifactId>${server.test.feature.pack.artifactId}</artifactId>
                                             <version>${server.version}</version>
                                             <!-- Required for rxjava -->
-                                            <!--<includedPackages>
+                                            <includedPackages>
                                                 <package>org.jboss.resteasy.resteasy-rxjava2</package>
-                                            </includedPackages>-->
+                                            </includedPackages>
                                         </feature-pack>
                                     </feature-packs>
                                     <layers>
