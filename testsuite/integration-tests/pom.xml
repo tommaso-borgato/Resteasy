@@ -250,7 +250,6 @@
                                             <!-- Required for rxjava -->
                                             <includedPackages>
                                                 <package>org.jboss.resteasy.resteasy-rxjava2</package>
-                                                <package>io.reactivex.rxjava2.rxjava</package>
                                             </includedPackages>
                                         </feature-pack>
                                     </feature-packs>
