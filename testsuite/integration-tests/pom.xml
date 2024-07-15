@@ -260,6 +260,13 @@
                                         <layer>undertow-https</layer>
                                         <layer>ejb</layer>
                                     </layers>
+                                    <cli-sessions>
+                                        <cli-session>
+                                            <script-files>
+                                                <script>../config/configure-bootable-jar.cli</script>
+                                            </script-files>
+                                        </cli-session>
+                                    </cli-sessions>
                                     <channels>
                                         <channel>
                                             <manifest>
