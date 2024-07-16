@@ -240,9 +240,17 @@ public class MavenUtil {
 
     private RepositorySystemSession newRepositorySystemSession() {
         DefaultRepositorySystemSession session = MavenRepositorySystemUtils.newSession();
+        logger.info("[1] newRepositorySystemSession - session: " + (session != null ? session.getLocalRepository() : null));
 
         LocalRepository localRepo = new LocalRepository(determineLocalMavenRepositoryHack());
-        session.setLocalRepositoryManager(REPOSITORY_SYSTEM.newLocalRepositoryManager(session, localRepo));
+        logger.info("[2] newRepositorySystemSession - localRepo: " + (localRepo != null ? localRepo.getBasedir().getAbsolutePath() : null));
+        logger.info("[3] newRepositorySystemSession - REPOSITORY_SYSTEM: " + REPOSITORY_SYSTEM);
+        session.setLocalRepositoryManager(
+                REPOSITORY_SYSTEM.newLocalRepositoryManager(
+                        session,
+                        localRepo
+                )
+        );
 
         session.setTransferListener(new ConsoleTransferListener());
         session.setRepositoryListener(new ConsoleRepositoryListener());
