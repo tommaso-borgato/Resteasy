@@ -503,6 +503,7 @@
             <modules>
                 <module>arquillian-utils</module>
                 <module>integration-tests</module>
+                <module>../providers/resteasy-html</module>
             </modules>
         </profile>
     </profiles>
