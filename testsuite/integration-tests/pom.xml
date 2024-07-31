@@ -285,7 +285,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <install.dir>${project.build.directory}/wildfly</install.dir>
+                                <install.dir>${project.build.directory}/jbossas-managed</install.dir>
                                 <bootable.jar>${project.build.directory}/jaxrs-server.jar</bootable.jar>
                                 <arquillian.xml>arquillian-bootable.xml</arquillian.xml>
                                 <container.management.port.managed>${container.management.port.managed}</container.management.port.managed>
