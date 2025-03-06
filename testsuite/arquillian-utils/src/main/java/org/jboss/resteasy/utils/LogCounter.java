@@ -1,5 +1,7 @@
 package org.jboss.resteasy.utils;
 
+import org.jboss.arquillian.protocol.servlet5.arq514hack.descriptors.impl.web.Strings;
+
 /**
  * Counter for log messages in log file.
  */
@@ -50,5 +52,9 @@ public class LogCounter {
      */
     public int count() {
         return TestUtil.getWarningCount(message, onServer, containerQualifier, useRegexp) - initCount;
+    }
+
+    public String getLogs() {
+        return Strings.join(TestUtil.readServerLogLines(onServer, containerQualifier), "\n");
     }
 }

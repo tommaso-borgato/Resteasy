@@ -112,7 +112,7 @@ public class JsonBindingAnnotationsJacksonTest {
      * @tpPassCrit The resource returns object with correct values
      * @tpSince RESTEasy 3.5
      */
-    @Test
+    @Test // https://jenkins.eapqe.psi.redhat.com/job/eap-8.x-resteasy-functional-ts-rhel-bootable-jar/345/jdk=oracle-java-17,label_exp=RHEL9&&dynamic&&large/testReport/junit/org.jboss.resteasy.test.providers.jsonb.basic/JsonBindingAnnotationsJacksonTest/jsonbNotOnServerNotOnClientTest/
     public void jsonbNotOnServerNotOnClientTest() throws Exception {
         String charset = "UTF-8";
         WebTarget target = client
@@ -120,10 +120,15 @@ public class JsonBindingAnnotationsJacksonTest {
         MediaType mediaType = MediaType.APPLICATION_JSON_TYPE.withCharset(charset);
         Entity<Cat> entity = Entity.entity(
                 new Cat("Rosa", "semi-british", "tabby", true, JsonBindingResource.CLIENT_TRANSIENT_VALUE), mediaType);
-        Cat json = target.request().post(entity, Cat.class);
         logger.info("Request entity: " + entity);
-        Assertions.assertEquals(json.getTransientVar(), JsonBindingResource.RETURNED_TRANSIENT_VALUE,
-                "Variable with JsonbTransient annotation should not be transient, if JSON-B is not used");
+        try {
+            Cat json = target.request().post(entity, Cat.class); // <--- HTTP 500 Internal Server Error
+            Assertions.assertEquals(json.getTransientVar(), JsonBindingResource.RETURNED_TRANSIENT_VALUE,
+                    "Variable with JsonbTransient annotation should not be transient, if JSON-B is not used");
+        } catch (jakarta.ws.rs.InternalServerErrorException err) {
+            logger.error(err.getMessage());
+            throw new jakarta.ws.rs.InternalServerErrorException("Request entity error: " + entity, err);
+        }
     }
 
     /**
@@ -134,7 +139,7 @@ public class JsonBindingAnnotationsJacksonTest {
      *                Server should returns relevant error message in response
      * @tpSince RESTEasy 3.5
      */
-    @Test
+    @Test // https://jenkins.eapqe.psi.redhat.com/job/eap-8.x-resteasy-functional-ts-rhel-bootable-jar/345/jdk=oracle-java-17,label_exp=RHEL9&&dynamic&&large/testReport/junit/org.jboss.resteasy.test.providers.jsonb.basic/JsonBindingAnnotationsJacksonTest/negativeScenarioOnServer/
     public void negativeScenarioOnServer() throws Exception {
         LogCounter errorLogCounter = new LogCounter("ERROR", false, DEFAULT_CONTAINER_QUALIFIER);
         try {
@@ -146,9 +151,17 @@ public class JsonBindingAnnotationsJacksonTest {
                     new Cat("Rosa", "semi-british", "tabby", true, JsonBindingResource.CLIENT_TRANSIENT_VALUE), mediaType);
             logger.info("Request entity: " + entity);
             Response response = target.request().post(entity);
-            // check server logs
-            Assertions.assertEquals(errorLogCounter.count(), 1,
-                    "Server printed more than one error message during the request");
+            // check server logs: Server printed more than one error message during the request:  ==> expected: <1> but was: <0>
+            Assertions.assertEquals( 1, errorLogCounter.count(),
+                    "Server printed more than one error message during the request: " +
+                            "\nON-SERVER=false:" +
+                            "\n--------------------------------" +
+                            "\n" + TestUtil.readServerLogLines(false, DEFAULT_CONTAINER_QUALIFIER) +
+                            "\n--------------------------------" +
+                            "\nON-SERVER=true:" +
+                            "\n--------------------------------" +
+                            "\n" + TestUtil.readServerLogLines(true, DEFAULT_CONTAINER_QUALIFIER) +
+                            "\n--------------------------------\n");
             // check response
             int responseCode = response.getStatus();
             Assertions.assertEquals(responseCode, 500, "Wrong response code");
